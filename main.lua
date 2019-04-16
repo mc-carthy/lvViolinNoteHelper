@@ -60,7 +60,7 @@ function drawStaff(x, y, w, h)
             -- love.graphics.setColor(0, 0, 0)
             love.graphics.line(x, y + i * h / numLines - 0.5 * h / numLines, x + w, y + i * h / numLines - 0.5 * h / numLines)
         -- else
-            -- love.graphics.setColor(0, 0, 0, 0.25)
+        --     love.graphics.setColor(0, 0, 0, 0.25)
         end
         -- love.graphics.line(x, y + i * h / numLines - 0.5 * h / numLines, x + w, y + i * h / numLines - 0.5 * h / numLines)
     end
@@ -72,11 +72,20 @@ function drawStaff(x, y, w, h)
         local radius = 5
         local xOff = 60
         local lineHeight = 30
-        love.graphics.circle('fill', x + xOff, y + staffPositions[highlightedNote] * h / numLines - 0.5 * h / numLines, radius)
-        love.graphics.line(x + xOff + radius, y + staffPositions[highlightedNote] * h / numLines - 0.5 * h / numLines, x + xOff + radius, y + staffPositions[highlightedNote] * h / numLines - 0.5 * h / numLines - lineHeight)
-        if staffPositions[highlightedNote] % 1 == 0 and (staffPositions[highlightedNote] <= 2 or staffPositions[highlightedNote] >= 8) then
+        local i = staffPositions[highlightedNote]
+        love.graphics.circle('fill', x + xOff, y + i * h / numLines - 0.5 * h / numLines, radius)
+        love.graphics.line(x + xOff + radius, y + i * h / numLines - 0.5 * h / numLines, x + xOff + radius, y + i * h / numLines - 0.5 * h / numLines - lineHeight)
+        if i <= 2 or i >= 8 then
             local lineWidth = 20
-            love.graphics.line(x + xOff - lineWidth / 2, y + staffPositions[highlightedNote] * h / numLines - 0.5 * h / numLines, x + xOff + lineWidth / 2, y + staffPositions[highlightedNote] * h / numLines - 0.5 * h / numLines)
+            if i % 1 ~= 0 then
+                local midPoint = 4.5
+                if i - midPoint < 0 then
+                    i = i + 0.5
+                else
+                    i = i - 0.5
+                end
+            end
+            love.graphics.line(x + xOff - lineWidth / 2, y + i * h / numLines - 0.5 * h / numLines, x + xOff + lineWidth / 2, y + i * h / numLines - 0.5 * h / numLines)
         end
     end
 end
