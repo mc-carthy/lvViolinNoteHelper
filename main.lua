@@ -1,9 +1,34 @@
 local stringPositionNotes = {
-    { 'E', 'F#', 'G#', 'A', 'B' },
-    { 'A', 'B', 'C#', 'D', 'E' },
-    { 'D', 'E', 'F#', 'G', 'A' },
-    { 'G', 'A', 'B', 'C', 'D' }
+    { '5E', '5F#', '5G#', '5A', '5B' },
+    { '4A', '4B', '5C#', '5D', '5E' },
+    { '4D', '4E', '4F#', '4G', '4A' },
+    { '3G', '3A', '3B', '4C', '4D' }
 }
+
+local staffPositions = {
+    ['3G'] = 9.5,
+    ['3A'] = 9,
+    ['3B'] = 8.5,
+    ['4C'] = 8,
+
+    ['4D'] = 7.5,
+    ['4E'] = 7,
+    ['4F#'] = 6.5,
+    ['4G'] = 6,
+
+    ['4A'] = 5.5,
+    ['4B'] = 5,
+    ['5C#'] = 4.5,
+    ['5D'] = 4,
+    
+    ['5E'] = 3.5,
+    ['5F#'] = 3,
+    ['5G#'] = 2.5,
+    ['5A'] = 2,
+    ['5B'] = 1.5
+}
+
+local highlightedNote = nil
 
 function love.load()
 
@@ -29,11 +54,18 @@ function drawStaff(x, y, w, h)
     love.graphics.rectangle('fill', x, y, w, h)
 
     love.graphics.setColor(0, 0, 0)
-    local numLines = 8
+    local numLines = 10
     for i = 1, numLines do
         if i > 2 and i < 8 then
-            love.graphics.line(x, y + i * h / numLines - 0.5 * h / numLines, x + w, y + i * h / numLines - 0.5 * h / numLines)
+            love.graphics.setColor(0, 0, 0)
+        else
+            love.graphics.setColor(0, 0, 0, 0.25)
         end
+        love.graphics.line(x, y + i * h / numLines - 0.5 * h / numLines, x + w, y + i * h / numLines - 0.5 * h / numLines)
+    end
+    love.graphics.setColor(0, 0, 0)
+    if highlightedNote then
+        love.graphics.circle('fill', x + 20, y + staffPositions[highlightedNote] * h / numLines - 0.5 * h / numLines, 5)
     end
 end
 
@@ -61,7 +93,6 @@ function drawFingerboard(x, y, length, headWidth, bodyWidth)
         love.graphics.line(x, y + ((bodyWidth - headWidth) / 2) + headWidth * (i / 4) - headWidth / 8, x + length, y + bodyWidth * (i / 4) - bodyWidth / 8)
     end
     
-    local highlightedNote = ''
     for i = 1, 5 do
         for j = 1, 4 do
             local pointX = x + positions[i] * length
@@ -76,6 +107,7 @@ function drawFingerboard(x, y, length, headWidth, bodyWidth)
                 highlightedNote = stringPositionNotes[j][i]
             else
                 love.graphics.setColor(0.75, 0.75, 0.75)
+                -- highlightedNote = nil
             end                
             love.graphics.circle('fill', pointX, pointY, radius)
             love.graphics.setColor(0, 0, 0)
@@ -85,5 +117,7 @@ function drawFingerboard(x, y, length, headWidth, bodyWidth)
     end
 
     love.graphics.setColor(0, 0, 0)
-    love.graphics.print(highlightedNote, 20, 85)
+    if highlightedNote then
+        love.graphics.print(highlightedNote:sub(2), 20, 85)
+    end
 end
