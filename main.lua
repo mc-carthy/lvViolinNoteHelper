@@ -15,11 +15,25 @@ end
 
 function love.draw()
     drawFingerboard(50, 50, 675, 60, 90)
+    drawStaff(50, 200, 200, 100)
 end
 
 function love.keypressed(key)
     if key == 'escape' then
         love.event.quit()
+    end
+end
+
+function drawStaff(x, y, w, h)
+    love.graphics.setColor(0.8, 0.8, 0.8)
+    love.graphics.rectangle('fill', x, y, w, h)
+
+    love.graphics.setColor(0, 0, 0)
+    local numLines = 8
+    for i = 1, numLines do
+        if i > 2 and i < 8 then
+            love.graphics.line(x, y + i * h / numLines - 0.5 * h / numLines, x + w, y + i * h / numLines - 0.5 * h / numLines)
+        end
     end
 end
 
