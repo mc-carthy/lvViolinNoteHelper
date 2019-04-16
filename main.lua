@@ -31,7 +31,7 @@ local staffPositions = {
 local highlightedNote = nil
 
 function love.load()
-
+    clef = love.graphics.newImage('assets/img/clef.png')
 end
 
 function love.update(dt)
@@ -57,15 +57,27 @@ function drawStaff(x, y, w, h)
     local numLines = 10
     for i = 1, numLines do
         if i > 2 and i < 8 then
-            love.graphics.setColor(0, 0, 0)
-        else
-            love.graphics.setColor(0, 0, 0, 0.25)
+            -- love.graphics.setColor(0, 0, 0)
+            love.graphics.line(x, y + i * h / numLines - 0.5 * h / numLines, x + w, y + i * h / numLines - 0.5 * h / numLines)
+        -- else
+            -- love.graphics.setColor(0, 0, 0, 0.25)
         end
-        love.graphics.line(x, y + i * h / numLines - 0.5 * h / numLines, x + w, y + i * h / numLines - 0.5 * h / numLines)
+        -- love.graphics.line(x, y + i * h / numLines - 0.5 * h / numLines, x + w, y + i * h / numLines - 0.5 * h / numLines)
     end
+
     love.graphics.setColor(0, 0, 0)
+    love.graphics.draw(clef, x + 5, y + 10, 0, 0.1)
+
     if highlightedNote then
-        love.graphics.circle('fill', x + 20, y + staffPositions[highlightedNote] * h / numLines - 0.5 * h / numLines, 5)
+        local radius = 5
+        local xOff = 60
+        local lineHeight = 30
+        love.graphics.circle('fill', x + xOff, y + staffPositions[highlightedNote] * h / numLines - 0.5 * h / numLines, radius)
+        love.graphics.line(x + xOff + radius, y + staffPositions[highlightedNote] * h / numLines - 0.5 * h / numLines, x + xOff + radius, y + staffPositions[highlightedNote] * h / numLines - 0.5 * h / numLines - lineHeight)
+        if staffPositions[highlightedNote] % 1 == 0 and (staffPositions[highlightedNote] <= 2 or staffPositions[highlightedNote] >= 8) then
+            local lineWidth = 20
+            love.graphics.line(x + xOff - lineWidth / 2, y + staffPositions[highlightedNote] * h / numLines - 0.5 * h / numLines, x + xOff + lineWidth / 2, y + staffPositions[highlightedNote] * h / numLines - 0.5 * h / numLines)
+        end
     end
 end
 
