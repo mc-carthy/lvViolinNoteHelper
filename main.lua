@@ -32,6 +32,7 @@ local highlightedNote = nil
 
 function love.load()
     clef = love.graphics.newImage('assets/img/clef.png')
+    love.graphics.setNewFont(15)
 end
 
 function love.update(dt)
@@ -74,6 +75,9 @@ function drawStaff(x, y, w, h)
         local lineHeight = 30
         local i = staffPositions[highlightedNote]
         love.graphics.circle('fill', x + xOff, y + i * h / numLines - 0.5 * h / numLines, radius)
+        if highlightedNote:sub(-1) == '#' then
+            love.graphics.print('#', x + xOff - 17, y + i * h / numLines - 0.5 * h / numLines - radius * 2)
+        end
         love.graphics.line(x + xOff + radius, y + i * h / numLines - 0.5 * h / numLines, x + xOff + radius, y + i * h / numLines - 0.5 * h / numLines - lineHeight)
         if i <= 2 or i >= 8 then
             local lineWidth = 20
@@ -139,6 +143,6 @@ function drawFingerboard(x, y, length, headWidth, bodyWidth)
 
     love.graphics.setColor(0, 0, 0)
     if highlightedNote then
-        love.graphics.print(highlightedNote:sub(2), 20, 85)
+        love.graphics.print(highlightedNote:sub(2), 15, 85)
     end
 end
